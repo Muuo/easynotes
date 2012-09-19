@@ -1,3 +1,4 @@
+/** Muuo. In God I trust :-) **/
 /** @file paex_record.c
 	@ingroup examples_src
 	@brief Record input into an array; Save array to a file; Playback recorded data.

@@ -1,0 +1,13 @@
+(H2MN)Hum to Music Notation
+\*************************/
+19-09-2012
+So far, I haven't done much. I've managed to get input and output using
+portaudio. Still haven't managed to get a copy of the array storing the
+recording into the main function. Once I manage to do this... it will
+be possible to pass this array to the fft routine(mfft).
+
+Once I'm able to obtain the results of the fft(fast fourier transform)
+of the recording, it will be possible to analyze it and extract
+frequencies... and eventually notes and timing of said notes.
+
+Muuo. In God I trust :-) 
