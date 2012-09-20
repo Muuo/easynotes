@@ -54,7 +54,7 @@
 /* #define DITHER_FLAG     (paDitherOff) */
 #define DITHER_FLAG     (0) /**/
 /** Set to 1 if you want to capture the recording to a file. */
-#define WRITE_TO_FILE   (0)
+#define WRITE_TO_FILE   (1)
 
 /* Select sample format. */
 #if 1
@@ -345,6 +345,7 @@ int pa_io(void)
         if( err != paNoError ) goto done;
         
         printf("Done.\n"); fflush(stdout);
+	return totalFrames;
     }
 
 done:
@@ -356,7 +357,7 @@ done:
         fprintf( stderr, "An error occured while using the portaudio stream\n" );
         fprintf( stderr, "Error number: %d\n", err );
         fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
-        err = 1;          /* Always return 0 or 1, but no other return codes. */
+        err = -1;          /* Always return -1 or totalFrames, but no other return codes. */
     }
     return err;
 }

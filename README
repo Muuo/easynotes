@@ -10,4 +10,8 @@ Once I'm able to obtain the results of the fft(fast fourier transform)
 of the recording, it will be possible to analyze it and extract
 frequencies... and eventually notes and timing of said notes.
 
+20-09-2012
+I've managed to read the array from recorded.raw. Now all that's left 
+is passing the array to mfft and so on and so forth.
+
 Muuo. In God I trust :-) 
