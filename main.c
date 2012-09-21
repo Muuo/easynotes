@@ -4,21 +4,30 @@
 #include <fftw3.h>
 #include "pa_io.h"
 
+int suba(SAMPLE *arr, SAMPLE *sub,int start, int stop)
+{
+	int x,y;
+	//sub=(double*) malloc(sizeof(double) * (stop-start))
+	for(x=start,y=0;x<stop;x++,y++)
+		sub[y]=arr[x];
+	return 0;
+}
+
 int mfft(double *dat, fftw_complex *out,int N)
 {
-double *in;
-fftw_plan p;
+	double *in;
+	fftw_plan p;
 
-in = (double*) malloc(sizeof(double) * N);
-out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (N/2+1));
-p = fftw_plan_dft_r2c_1d(N, in, out, FFTW_ESTIMATE);
+	in = (double*) malloc(sizeof(double) * N);
+	out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (N/2+1));
+	p = fftw_plan_dft_r2c_1d(N, in, out, FFTW_ESTIMATE);
 
-in=dat;
-fftw_execute(p); /* repeat as needed */
+	in=dat;
+	fftw_execute(p); /* repeat as needed */
 
-fftw_destroy_plan(p);
-fftw_free(in); fftw_free(out);
-return 0;
+	fftw_destroy_plan(p);
+	//fftw_free(in); fftw_free(out);
+	return 0;
 }
 
 int readfile(SAMPLE *recording, int totalFrames)
@@ -65,8 +74,13 @@ int main(void)
 			printf(""PRINTF_S_FORMAT"\n",recording[x]);
 	}		
 #endif
-		
-
+	//int numWindows = totalframes/1024
+	SAMPLE section[1024];
+	fftw_complex *bins;
+	suba(recording,section,0,1024);
+	mfft((double*)section,bins,1024);
+	printf("fft done!");
+	fftw_free(bins);
 done:
 	return 0;
 }
