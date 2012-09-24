@@ -74,13 +74,17 @@ int main(void)
 			printf(""PRINTF_S_FORMAT"\n",recording[x]);
 	}		
 #endif
-	//int numWindows = totalframes/1024
+	int numWindows = totalframes/1024,x=0;
 	SAMPLE section[1024];
-	fftw_complex *bins;
-	suba(recording,section,0,1024);
-	mfft((double*)section,bins,1024);
-	printf("fft done!");
-	fftw_free(bins);
+	
+	for(x=0;x<numWindows;x++)
+	{
+		fftw_complex *bins;
+		suba(recording,section,x*0,(x*0)+1024);
+		mfft((double*)section,bins,1024);
+		printf("fft done!");
+		fftw_free(bins);
+	}
 done:
 	return 0;
 }
