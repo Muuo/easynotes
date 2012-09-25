@@ -50,7 +50,7 @@
 #define SAMPLE_RATE  (44100)
 #define FRAMES_PER_BUFFER (512)
 #define NUM_SECONDS     (4.64399093)
-#define NUM_CHANNELS    (1)
+#define NUM_CHANNELS    (2)
 /* #define DITHER_FLAG     (paDitherOff) */
 #define DITHER_FLAG     (0) /**/
 /** Set to 1 if you want to capture the recording to a file. */
@@ -210,7 +210,7 @@ int pa_io(void)
 
     printf("patest_record.c\n"); fflush(stdout);
 
-    data.maxFrameIndex = totalFrames = NUM_SECONDS * SAMPLE_RATE; /* Record for a few seconds. */
+    data.maxFrameIndex = totalFrames = (int)(NUM_SECONDS * SAMPLE_RATE); /* Record for a few seconds. */
     data.frameIndex = 0;
     numSamples = totalFrames * NUM_CHANNELS;
     numBytes = numSamples * sizeof(SAMPLE);

@@ -4,6 +4,13 @@
 #include <fftw3.h>
 #include "pa_io.h"
 
+void copya(double *a, double *b,int size)
+{
+	int x;
+	for(x=0;x<size;x++)
+		b[x]=a[x];
+}
+
 int suba(SAMPLE *arr, SAMPLE *sub,int start, int stop)
 {
 	int x,y;
@@ -18,14 +25,16 @@ int mfft(double *dat, fftw_complex *out,int N)
 	double *in;
 	fftw_plan p;
 
-	in = (double*) malloc(sizeof(double) * N);
-	out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (N/2+1));
+	in = (double*) fftw_malloc(sizeof(double) * N);
+	//out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (N/2+1));
 	p = fftw_plan_dft_r2c_1d(N, in, out, FFTW_ESTIMATE);
-
-	in=dat;
+	
+	copya(dat,in,N);
+	//in=dat;
 	fftw_execute(p); /* repeat as needed */
 
 	fftw_destroy_plan(p);
+	fftw_free(in);
 	//fftw_free(in); fftw_free(out);
 	return 0;
 }
@@ -74,17 +83,19 @@ int main(void)
 			printf(""PRINTF_S_FORMAT"\n",recording[x]);
 	}		
 #endif
-	int numWindows = totalframes/1024,x=0;
+	int numWindows = frames/1024,x=0;
 	SAMPLE section[1024];
-	
+	fftw_complex *bins;
+	bins=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (1024/2+1));
+
 	for(x=0;x<numWindows;x++)
-	{
-		fftw_complex *bins;
-		suba(recording,section,x*0,(x*0)+1024);
+	{	
+		suba(recording,section,x*1024,(x*1024)+1024);
+		printf("suba done!\n");
 		mfft((double*)section,bins,1024);
-		printf("fft done!");
-		fftw_free(bins);
+		printf("fft done!\n");
 	}
+	fftw_free(bins);
 done:
 	return 0;
 }
