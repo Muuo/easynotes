@@ -30,6 +30,7 @@ int mfft(double *dat, fftw_complex *out,int N)
 	p = fftw_plan_dft_r2c_1d(N, in, out, FFTW_ESTIMATE);
 	
 	copya(dat,in,N);
+	//fftw_free(in);
 	//in=dat;
 	fftw_execute(p); /* repeat as needed */
 
@@ -91,9 +92,7 @@ int main(void)
 	for(x=0;x<numWindows;x++)
 	{	
 		suba(recording,section,x*1024,(x*1024)+1024);
-		printf("suba done!\n");
 		mfft((double*)section,bins,1024);
-		printf("fft done!\n");
 	}
 	fftw_free(bins);
 done:
