@@ -70,9 +70,9 @@ int writefile(SAMPLE *recording,int totalFrames)
 	sfinfo.samplerate	= SAMPLE_RATE ;
 	sfinfo.frames		= totalFrames ;
 	sfinfo.channels		= NUM_CHANNELS ;
-	sfinfo.format		= (SF_FORMAT_WAV | SF_FORMAT_PCM_24) ;
+	sfinfo.format		= (SF_FORMAT_WAV | SF_FORMAT_PCM_32) ;
 	
-	if (! (file = sf_open ("recorded.wav", SFM_WRITE, &sfinfo)))
+	if (! (file = sf_open ("pyplot/recorded.wav", SFM_WRITE, &sfinfo)))
 	{	printf ("Error : Not able to open output file.\n") ;
 		return 1 ;
 	}
