@@ -19,4 +19,10 @@ I can now pass multiple windows to mfftw without errors. I think I now
 need to prioritise getting a graphing system online so I can visualise
 the data and get rid of the 2-channel issue.
 
+27-09-2012
+I can now write the recorded data to a wav file using libsndfile and 
+read said data using python. I have sucessfully used matplotlib to 
+display a spectrum. However, I have realized that it might be easier 
+to just use audacity. Now I have to split the channels in main.c and
+find a nice way to display the fft data.
 Muuo. In God I trust :-) 
