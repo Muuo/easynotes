@@ -59,7 +59,7 @@ int readfile(SAMPLE *recording, int totalFrames)
 		return 0;
         }
 }
-int writefile(SAMPLE *recording,int totalFrames)
+int writefile(SAMPLE *recording,int totalFrames, int c)
 {
 		
 	SNDFILE	*file ;
@@ -69,7 +69,7 @@ int writefile(SAMPLE *recording,int totalFrames)
 
 	sfinfo.samplerate	= SAMPLE_RATE ;
 	sfinfo.frames		= totalFrames ;
-	sfinfo.channels		= NUM_CHANNELS ;
+	sfinfo.channels		= c ;
 	sfinfo.format		= (SF_FORMAT_WAV | SF_FORMAT_PCM_32) ;
 	
 	if (! (file = sf_open ("pyplot/recorded.wav", SFM_WRITE, &sfinfo)))
@@ -103,7 +103,7 @@ int main(void)
     		for( i=0; i<numSamples; i++ ) recording[i] = 0;	
 	}
 	readfile(recording,frames);
-	writefile(recording,frames);
+	//writefile(recording,frames,2);
 #if 0
 	{
 		int x;
@@ -137,7 +137,10 @@ int main(void)
 	}
 	for(x=0;x<frames/2;x++)
 		mono[x]=(left[x]+right[x])/2.0;
-
+	free(left);free(right);	
+	
+	writefile(mono,frames/2,1);
+	
 	int numWindows = frames/(1024*2);x=0;
 	SAMPLE section[1024];
 	fftw_complex *bins;
@@ -148,7 +151,12 @@ int main(void)
 		suba(mono,section,x*1024,(x*1024)+1024);
 		mfft((double*)section,bins,1024);
 	}
+
+	/*Place code to process bins here*/
+
 	fftw_free(bins);
+	free(recording);
+	free(mono);
 done:
 	return 0;
 }
