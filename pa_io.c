@@ -49,7 +49,7 @@
 /* #define SAMPLE_RATE  (17932) // Test failure to open with this value. */
 #define SAMPLE_RATE  (44100)
 #define FRAMES_PER_BUFFER (512)
-#define NUM_SECONDS     (5)
+#define NUM_SECONDS     (9.984580499)
 #define NUM_CHANNELS    (2)
 /* #define DITHER_FLAG     (paDitherOff) */
 #define DITHER_FLAG     (0) /**/
@@ -210,7 +210,7 @@ int pa_io(void)
 
     printf("patest_record.c\n"); fflush(stdout);
 
-    data.maxFrameIndex = totalFrames = NUM_SECONDS * SAMPLE_RATE; /* Record for a few seconds. */
+    data.maxFrameIndex = totalFrames = (int)(NUM_SECONDS * SAMPLE_RATE); /* Record for a few seconds. */
     data.frameIndex = 0;
     numSamples = totalFrames * NUM_CHANNELS;
     numBytes = numSamples * sizeof(SAMPLE);
@@ -298,7 +298,7 @@ int pa_io(void)
     }
 #endif
 
-#if 1
+#if 0
 	{
 		int x;
 		for(x=10;x<=15;x++)

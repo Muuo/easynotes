@@ -14,4 +14,9 @@ frequencies... and eventually notes and timing of said notes.
 I've managed to read the array from recorded.raw. Now all that's left 
 is passing the array to mfft and so on and so forth.
 
+25-09-2012
+I can now pass multiple windows to mfftw without errors. I think I now
+need to prioritise getting a graphing system online so I can visualise
+the data and get rid of the 2-channel issue.
+
 Muuo. In God I trust :-) 
