@@ -111,14 +111,41 @@ int main(void)
 			printf(""PRINTF_S_FORMAT"\n",recording[x]);
 	}		
 #endif
-	int numWindows = frames/1024,x=0;
+	SAMPLE *left,*right,*mono;
+	left=(SAMPLE *)malloc(frames*sizeof(SAMPLE));
+	right=(SAMPLE *)malloc(frames*sizeof(SAMPLE));
+	mono=(SAMPLE *)malloc(frames*sizeof(SAMPLE));
+	int x,y=0,state=1,lx=0,rx=0;
+	for(x=0;x<frames;x++)
+	{
+		if(y>3)
+		{
+			y=0;
+			state=abs(state-1);
+		}
+		if(state)
+		{
+			left[lx]=recording[x];
+			lx++;
+		}
+		else
+		{
+			right[rx]=recording[x];
+			rx++;
+		}
+		y++;
+	}
+	for(x=0;x<frames/2;x++)
+		mono[x]=(left[x]+right[x])/2.0;
+
+	int numWindows = frames/(1024*2);x=0;
 	SAMPLE section[1024];
 	fftw_complex *bins;
 	bins=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (1024/2+1));
 
 	for(x=0;x<numWindows;x++)
 	{	
-		suba(recording,section,x*1024,(x*1024)+1024);
+		suba(mono,section,x*1024,(x*1024)+1024);
 		mfft((double*)section,bins,1024);
 	}
 	fftw_free(bins);
