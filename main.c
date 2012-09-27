@@ -1,7 +1,9 @@
 /** Muuo. In God I trust :-) **/
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <fftw3.h>
+#include <sndfile.h>
 #include "pa_io.h"
 
 void copya(double *a, double *b,int size)
@@ -57,6 +59,30 @@ int readfile(SAMPLE *recording, int totalFrames)
 		return 0;
         }
 }
+int writefile(SAMPLE *recording,int totalFrames)
+{
+		
+	SNDFILE	*file ;
+	SF_INFO	sfinfo ;
+	
+	//memset (&sfinfo, 0, sizeof (sfinfo)) ;
+
+	sfinfo.samplerate	= SAMPLE_RATE ;
+	sfinfo.frames		= totalFrames ;
+	sfinfo.channels		= NUM_CHANNELS ;
+	sfinfo.format		= (SF_FORMAT_WAV | SF_FORMAT_PCM_24) ;
+	
+	if (! (file = sf_open ("recorded.wav", SFM_WRITE, &sfinfo)))
+	{	printf ("Error : Not able to open output file.\n") ;
+		return 1 ;
+	}
+	
+	if (sf_writef_float (file, (float *)recording, totalFrames) != totalFrames)
+		puts (sf_strerror (file)) ;
+	
+	sf_close (file) ;
+	return	 0 ;	
+}
 
 /*******************************************************************/
 int main(void)
@@ -77,7 +103,8 @@ int main(void)
     		for( i=0; i<numSamples; i++ ) recording[i] = 0;	
 	}
 	readfile(recording,frames);
-#if 1
+	writefile(recording,frames);
+#if 0
 	{
 		int x;
 		for(x=10;x<=15;x++)

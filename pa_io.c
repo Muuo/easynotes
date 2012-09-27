@@ -298,7 +298,7 @@ int pa_io(void)
     }
 #endif
 
-#if 1
+#if 0
 	{
 		int x;
 		for(x=10;x<=15;x++)
