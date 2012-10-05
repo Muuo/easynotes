@@ -1,5 +1,5 @@
 proj:main.o pa_io.o
-	gcc -Wall main.o pa_io.o -lportaudio -lfftw3 -lsndfile -lm -o build/proj
+	gcc -Wall main.o pa_io.o -lportaudio -lfftw3 -lsndfile -lmgl -lm -o build/proj
 
 main.o:main.c pa_io.h
 	gcc -Wall -c main.c main.h pa_io.h

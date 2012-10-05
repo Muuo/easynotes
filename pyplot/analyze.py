@@ -18,7 +18,7 @@ data = wf.readframes(wf.getnframes())
 data = array.array('i',data)
 
 out=np.fft.fft(data)
-#plot(abs(out))
+plot(abs(out))
 show()
 plot(data)
 show()

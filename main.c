@@ -1,4 +1,5 @@
 /** Muuo. In God I trust :-) **/
+#include <mgl/mgl_c.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -6,11 +7,59 @@
 #include <sndfile.h>
 #include "pa_io.h"
 
+#define N 1024
+
+int plot(void)
+{
+	HMGL gr = mgl_create_graph_zb(600,400);
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	/* put sample code here              */
+	HMDT y = mgl_create_data_size(50,3,1);
+	mgl_data_modify(y,"0.7*sin(2*pi*x) + 0.5*cos(3*pi*x) + 0.2*sin(pi*x)",0);
+	mgl_data_modify(y,"sin(2*pi*x)",1);
+	mgl_data_modify(y,"cos(2*pi*x)",2);
+	mgl_box(gr,1);
+	mgl_plot(gr,y,NULL);
+	mgl_delete_data(y);	
+    	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	mgl_show_image(gr,"eog",0);
+	//mgl_write_png(gr);
+	mgl_delete_graph(gr);
+	return 0;		
+}
+
+
+void printbin(fftw_complex *b,int len)
+{
+	int x;
+	for(x=0;x<len;x++)
+	//	printf("%fHz - %f+%fj\n",x*SAMPLE_RATE/(float)N,b[x][0],b[x][1]);
+		printf("%Le ",((long double)b[x][0]*(long double)b[x][0])+((long double)b[x][1]*(long double)b[x][1]));
+	printf("\n");
+}
+
 void copya(double *a, double *b,int size)
 {
 	int x;
 	for(x=0;x<size;x++)
 		b[x]=a[x];
+}
+
+int greatest(fftw_complex *b)
+{
+	int x=0,gind=-1;
+	long double greatest=0,mag;
+	for(x=0;x<(N/2+1);x++)
+	{
+		mag=((long double)b[x][0]*(long double)b[x][0])+((long double)b[x][1]*(long double)b[x][1]);
+		if(mag>greatest)
+		{
+			greatest=mag;
+			gind=x;
+		}
+	}
+	//printf("Greatest mag is %Lf\n",greatest);
+	return gind;
 }
 
 int suba(SAMPLE *arr, SAMPLE *sub,int start, int stop)
@@ -22,7 +71,7 @@ int suba(SAMPLE *arr, SAMPLE *sub,int start, int stop)
 	return 0;
 }
 
-int mfft(double *dat, fftw_complex *out,int N)
+int mfft(double *dat, fftw_complex *out)
 {
 	double *in;
 	fftw_plan p;
@@ -141,15 +190,21 @@ int main(void)
 	
 	writefile(mono,frames/2,1);
 	
-	int numWindows = frames/(1024*2);x=0;
-	SAMPLE section[1024];
+	int numWindows = frames/(N*2);x=0;
+	SAMPLE section[N];
 	fftw_complex *bins;
-	bins=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (1024/2+1));
-
+	bins=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (N/2+1));
+	
+	int lind;
 	for(x=0;x<numWindows;x++)
 	{	
-		suba(mono,section,x*1024,(x*1024)+1024);
-		mfft((double*)section,bins,1024);
+		suba(mono,section,x*N,(x*N)+N);
+		mfft((double*)section,bins);
+//		printbin(bins,513);
+		if ((lind=greatest(bins))!=-1)
+			printf("The fundamental frequency is %f\n", lind*SAMPLE_RATE/(float)N);
+		else
+			printf("Bummer!\n");
 	}
 
 	/*Place code to process bins here*/
@@ -157,6 +212,7 @@ int main(void)
 	fftw_free(bins);
 	free(recording);
 	free(mono);
+	plot();
 done:
 	return 0;
 }
