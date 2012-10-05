@@ -1,5 +1,4 @@
 /** Muuo. In God I trust :-) **/
-#include <mgl/mgl_c.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -8,26 +7,6 @@
 #include "pa_io.h"
 
 #define N 1024
-
-int plot(void)
-{
-	HMGL gr = mgl_create_graph_zb(600,400);
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	/* put sample code here              */
-	HMDT y = mgl_create_data_size(50,3,1);
-	mgl_data_modify(y,"0.7*sin(2*pi*x) + 0.5*cos(3*pi*x) + 0.2*sin(pi*x)",0);
-	mgl_data_modify(y,"sin(2*pi*x)",1);
-	mgl_data_modify(y,"cos(2*pi*x)",2);
-	mgl_box(gr,1);
-	mgl_plot(gr,y,NULL);
-	mgl_delete_data(y);	
-    	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	mgl_show_image(gr,"eog",0);
-	//mgl_write_png(gr);
-	mgl_delete_graph(gr);
-	return 0;		
-}
-
 
 void printbin(fftw_complex *b,int len)
 {
@@ -212,7 +191,6 @@ int main(void)
 	fftw_free(bins);
 	free(recording);
 	free(mono);
-	plot();
 done:
 	return 0;
 }

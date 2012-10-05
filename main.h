@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <mgl/mgl_c.h>
 #include <stdlib.h>
 #include <fftw3.h>
 #include "pa_io.h"
